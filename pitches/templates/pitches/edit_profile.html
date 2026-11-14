@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <!-- استدعاء خط Cairo من جوجل -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', Tahoma, sans-serif !important;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تعديل المعلومات الشخصية</title>
+    <!-- استدعاء بوتستراب عشان التصميم يفضل شغال وجميل -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body {
+            background-color: #f4f6f8;
+            direction: rtl;
+            text-align: right;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        .card {
+            background: white;
+            /* تعديل العرض ليملأ الشاشة بمرونة بدلاً من 500px الثابتة */
+            width: 92%;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 25px 20px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.08);
+        }
+        h2, h3 {
+            text-align: center;
+            color: #333;
+            font-weight: 700;
+        }
+        .profile-img {
+            display: block;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px auto;
+            border: 3px solid #28a745;
+        }
+        form p {
+            margin-bottom: 15px;
+        }
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        form input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        /* تنسيقات الألوان الديناميكية للـ JavaScript */
+        .border-red {
+            border-color: #d9534f !important;
+            background-color: #fff9f9;
+        }
+        .border-green {
+            border-color: #28a745 !important;
+            background-color: #f9fff9;
+        }
+        .text-red {
+            color: #d9534f;
+            font-size: 11px;
+            font-weight: bold;
+            display: block;
+            margin-top: 3px;
+        }
+        .text-green {
+            color: #28a745;
+            font-size: 11px;
+            font-weight: bold;
+            display: block;
+            margin-top: 3px;
+        }
+        .helptext, ul.errorlist {
+            font-size: 11px;
+            color: #666;
+            list-style: none;
+            padding: 0;
+        }
+        ul.errorlist {
+            color: #d9534f;
+        }
+        button {
+            width: 100%;
+            background: #28a745;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #666;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            color: #333;
+            text-decoration: underline;
+        }
+        hr {
+            margin: 25px 0;
+            border: 0;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>تعديل المعلومات الشخصية ⚙️</h2>
+        
+        {% if profile.profile_image %}
+            <img src="{{ profile.profile_image.url }}" alt="صورة البروفايل" class="profile-img">
+        {% else %}
+            <div style="width: 90px; height: 90px; background: #ddd; border-radius: 50%; margin: 0 auto 15px auto; display: flex; align-items: center; justify-content: center; font-size: 35px;">👤</div>
+        {% endif %}
+
+        <!-- فورم واحد شامل لكل البيانات وكلمة المرور -->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>
+                <label>صورة البروفايل الجديدة:</label>
+                <input type="file" name="profile_image">
+            </p>
+            <p>
+                <label>اسم المستخدم:</label>
+                <input type="text" name="username" value="{{ request.user.username }}">
+            </p>
+            <p>
+                <label>البريد الإلكتروني:</label>
+                <input type="email" name="email" value="{{ request.user.email }}">
+            </p>
+
+            <hr>
+            <h3>تغيير كلمة المرور :</h3>
+            
+            {{ password_form.as_p }}
+
+            <!-- رسائل التنبيه الديناميكية للـ JavaScript -->
+            <span id="new-pass-msg" class="text-red" style="display:none;">يجب ألا تقل كلمة المرور عن 8 خانات ❌</span>
+            <span id="confirm-pass-msg" class="text-red" style="display:none;">كلمة المرور غير متطابقة ❌</span>
+
+            <button type="submit">حفظ كافة التعديلات</button>
+        </form>
+
+        <a href="{% url 'home' %}" class="back-link">← العودة للرئيسية</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const newPasswordInput = document.querySelector('input[name="new_password1"]');
+            const confirmPasswordInput = document.querySelector('input[name="new_password2"]');
+            
+            const newPassMsg = document.getElementById('new-pass-msg');
+            const confirmPassMsg = document.getElementById('confirm-pass-msg');
+
+            function validatePasswords() {
+                if (!newPasswordInput || !confirmPasswordInput) return;
+
+                const passVal = newPasswordInput.value;
+                const confirmVal = confirmPasswordInput.value;
+
+                // لو الحقل فارغ، نخفي الرسائل ونشيل التنسيقات
+                if (passVal.length === 0) {
+                    newPasswordInput.className = '';
+                    newPassMsg.style.display = 'none';
+                } else {
+                    newPassMsg.style.display = 'block';
+                    if (passVal.length >= 8) {
+                        newPasswordInput.className = 'border-green';
+                        newPassMsg.textContent = "كلمة المرور مطابقة للشروط (8 خانات أو أكثر) ✔️";
+                        newPassMsg.className = 'text-green';
+                    } else {
+                        newPasswordInput.className = 'border-red';
+                        newPassMsg.textContent = "يجب ألا تقل كلمة المرور عن 8 خانات ❌ (الحالي: " + passVal.length + ")";
+                        newPassMsg.className = 'text-red';
+                    }
+                }
+
+                if (confirmVal.length === 0) {
+                    confirmPasswordInput.className = '';
+                    confirmPassMsg.style.display = 'none';
+                } else {
+                    confirmPassMsg.style.display = 'block';
+                    if (passVal === confirmVal && passVal.length >= 8) {
+                        confirmPasswordInput.className = 'border-green';
+                        confirmPassMsg.textContent = "كلمات المرور متطابقة ✔️";
+                        confirmPassMsg.className = 'text-green';
+                    } else {
+                        confirmPasswordInput.className = 'border-red';
+                        confirmPassMsg.textContent = "كلمة المرور غير متطابقة ❌";
+                        confirmPassMsg.className = 'text-red';
+                    }
+                }
+            }
+
+            if (newPasswordInput && confirmPasswordInput) {
+                newPasswordInput.addEventListener('input', validatePasswords);
+                confirmPasswordInput.addEventListener('input', validatePasswords);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<nav class="navbar navbar-light bg-light px-3 shadow-sm mb-4" style="border-radius: 0 0 12px 12px; display: flex; justify-content: space-between; align-items: center; position: relative;">
+  
+  <!-- زرار الـ 3 شرط في اليمين -->
+  <div style="position: relative;">
+    <button onclick="toggleMenu('customDropdownMenu', event)" class="btn p-0 border-0 bg-transparent" type="button" style="width: 40px; height: 40px; cursor: pointer;">
+      <span style="font-size: 24px; line-height: 1; color: #333;">☰</span>
+    </button>
+    <ul id="customDropdownMenu" style="display: none; position: absolute; right: 0; top: 45px; background: white; min-width: 180px; box-shadow: 0px 8px 16px rgba(0,0,0,0.15); border-radius: 10px; list-style: none; padding: 5px 0; margin: 0; z-index: 9999; text-align: right; direction: rtl;">
+      
+      <!-- إخفاء لينك الماتشات المفتوحة لو المستخدم جواها -->
+      {% if request.resolver_match.url_name != 'open_matches' %}
+          <li><a href="{% url 'open_matches' %}" style="display: block; padding: 10px 14px; color: #333; text-decoration: none; font-size: 13px;">⚡ الماتشات المفتوحة</a></li>
+      {% endif %}
+      
+      <li><a href="{% url 'customer_profile' %}" style="display: block; padding: 10px 14px; color: #333; text-decoration: none; font-size: 13px;">⚽ حجوزاتي</a></li>
+      
+      <!-- الشروط والقواعد شغال وبيدخل على الصفحة مباشرة -->
+      <li><a href="{% url 'terms' %}" style="display: block; padding: 10px 14px; color: #333; text-decoration: none; font-size: 13px; border-bottom: 1px solid #eee;">📋 الشروط والقواعد</a></li>
+      
+      <li><a href="#" style="display: block; padding: 10px 14px; color: #333; text-decoration: none; font-size: 13px;">📞 اتصل بنا</a></li>
+    </ul>
+  </div>
+
+  <!-- زرار البروفايل في الشمال -->
+  <div style="position: relative;">
+    {% if request.user.is_authenticated %}
+        <button onclick="toggleMenu('profileCustomMenu', event)" class="btn p-0 border-0 bg-transparent" type="button" style="cursor: pointer;">
+            {% if request.user.userprofile.profile_image %}
+                <img src="{{ request.user.userprofile.profile_image.url }}" alt="Profile" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 5px rgba(0,0,0,0.15); display: block;">
+            {% else %}
+                <div style="background: #0d6efd; color: white; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.15);">
+                    👤
+                </div>
+            {% endif %}
+        </button>
+        
+        <ul id="profileCustomMenu" style="display: none; position: absolute; left: 0; top: 45px; background: white; min-width: 180px; box-shadow: 0px 8px 16px rgba(0,0,0,0.15); border-radius: 10px; list-style: none; padding: 0; margin: 0; z-index: 9999; text-align: right; direction: rtl; overflow: hidden;">
+            <li style="padding: 10px 14px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                <span style="display: block; font-weight: bold; color: #333; font-size: 13px;">{{ request.user.username }}</span>
+                <span style="display: block; color: #6c757d; font-size: 11px;">مستخدم مسجل</span>
+            </li>
+            <li><a href="{% url 'edit_profile' %}" style="display: block; padding: 10px 14px; color: #333; text-decoration: none; font-size: 13px; border-bottom: 1px solid #eee;">⚙️ المعلومات الشخصية</a></li>
+            <li>
+                <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+                    {% csrf_token %}
+                    <button type="submit" style="width: 100%; text-align: right; background: none; border: none; padding: 10px 14px; color: #dc3545; font-size: 13px; font-weight: bold; cursor: pointer;">🚪 تسجيل الخروج</button>
+                </form>
+            </li>
+        </ul>
+    {% else %}
+        <a href="{% url 'login' %}" class="btn btn-sm btn-primary fw-bold px-3 py-2" style="border-radius: 20px; font-size: 13px; text-decoration: none;">دخول / تسجيل</a>
+    {% endif %}
+  </div>
+
+</nav>
+
+<script>
+  function toggleMenu(menuId, event) {
+    event.stopPropagation();
+    
+    var menu1 = document.getElementById('customDropdownMenu');
+    var menu2 = document.getElementById('profileCustomMenu');
+    
+    if (menuId === 'customDropdownMenu') {
+      if (menu2) menu2.style.display = 'none';
+      if (menu1) {
+        menu1.style.display = (menu1.style.display === 'block') ? 'none' : 'block';
+      }
+    } 
+    else if (menuId === 'profileCustomMenu') {
+      if (menu1) menu1.style.display = 'none';
+      if (menu2) {
+        menu2.style.display = (menu2.style.display === 'block') ? 'none' : 'block';
+      }
+    }
+  }
+
+  document.addEventListener('click', function(event) {
+    var menu1 = document.getElementById('customDropdownMenu');
+    var menu2 = document.getElementById('profileCustomMenu');
+    
+    if (menu1) menu1.style.display = 'none';
+    if (menu2) menu2.style.display = 'none';
+  });
+</script>

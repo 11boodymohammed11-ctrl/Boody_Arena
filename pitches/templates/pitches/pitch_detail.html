@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <!-- استدعاء خط Cairo من جوجل -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ pitch.name }} - Boody Arena</title>
+    <!-- ربط بوستستراب عشان نضمن تنسيقات جاهزة ومتجاوبة -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Cairo', Tahoma, sans-serif !important; 
+            background-color: #f4f4f9; 
+            margin: 0;
+            padding: 10px;
+            direction: rtl;
+            text-align: center;
+        }
+        .container-fluid { 
+            background: white; 
+            padding: 20px 15px; 
+            border-radius: 12px; 
+            max-width: 800px; 
+            margin: auto; 
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.08); 
+        }
+        h1 {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 12px;
+        }
+        p {
+            font-size: 1.05rem;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        img { 
+            width: 100%; 
+            max-height: 250px; 
+            object-fit: cover; 
+            border-radius: 8px; 
+            margin-bottom: 12px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .btn { 
+            display: block; 
+            width: 100%;
+            background: #28a745; 
+            color: white; 
+            padding: 12px 20px; 
+            text-decoration: none; 
+            border-radius: 8px; 
+            margin-top: 12px; 
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        } 
+        .map-btn { 
+            background: #007bff; 
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #6c757d;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        .back-link:hover {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4 px-3 text-center">
+        <h1>{{ pitch.name }}</h1>
+        <p><strong>📍 العنوان:</strong> {{ pitch.location }}</p>
+        <p><strong>💰 سعر الساعة:</strong> {{ pitch.price_per_hour }} جنيه</p>
+
+        <!-- عرض الصور لو موجودة -->
+        <div class="images-section mt-3">
+            {% if pitch.image1 %}
+                <img src="{{ pitch.image1.url }}" alt="{{ pitch.name }}">
+            {% endif %}
+            {% if pitch.image2 %}
+                <img src="{{ pitch.image2.url }}" alt="{{ pitch.name }}">
+            {% endif %}
+        </div>
+
+        <!-- زرار اللوكيشن GPS -->
+        {% if pitch.map_link %}
+            <a href="{{ pitch.map_link }}" target="_blank" class="btn map-btn">عرض الموقع على الخريطة 🗺️</a>
+        {% endif %}
+
+        <!-- زرار الحجز -->
+        <a href="{% url 'book_pitch' pitch.id %}" class="btn">احجز الميعاد الآن ⚽</a>
+        
+        <div>
+            <a href="{% url 'home' %}" class="back-link">← العودة للرئيسية</a>
+        </div>
+    </div>
+</body>
+</html>

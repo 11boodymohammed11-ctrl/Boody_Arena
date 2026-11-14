@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <!-- استدعاء خط Cairo من جوجل -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Cairo', Tahoma, sans-serif !important;
+    }
+</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب جديد</title>
+    <style>
+        body {
+            background-color: #f4f6f8;
+            font-family: Tahoma, sans-serif;
+            direction: rtl;
+            text-align: right;
+            padding: 20px;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .card {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            margin: 20px auto;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.08);
+            box-sizing: border-box;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            font-size: 1.5rem;
+        }
+        form p {
+            margin-bottom: 15px;
+        }
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+            font-size: 14px;
+        }
+        form input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .helptext, ul.errorlist {
+            font-size: 11px;
+            color: #666;
+            list-style: none;
+            padding: 0;
+            margin-top: 5px;
+        }
+        ul.errorlist {
+            color: #d9534f;
+        }
+        /* ألوان التغيير النصي */
+        .text-red {
+            color: #d9534f !important;
+            font-weight: bold;
+        }
+        .text-green {
+            color: #28a745 !important;
+            font-weight: bold;
+        }
+        button {
+            width: 100%;
+            background: #28a745;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>إنشاء حساب جديد ⚽</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">تسجيل</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.querySelector('input[type="password"]');
+            
+            if (passwordInput) {
+                const helpText = passwordInput.parentElement.querySelector('.helptext');
+                
+                if (helpText) {
+                    helpText.className = 'helptext text-red';
+                    
+                    passwordInput.addEventListener('input', function() {
+                        const length = passwordInput.value.length;
+                        
+                        if (length >= 8) {
+                            helpText.textContent = "كلمة المرور مطابقة للشروط (8 خانات أو أكثر) ✔️";
+                            helpText.className = 'helptext text-green';
+                        } else {
+                            helpText.textContent = "يجب أن تكون كلمة المرور مكونة من 8 خانات أو أكثر ❌";
+                            helpText.className = 'helptext text-red';
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

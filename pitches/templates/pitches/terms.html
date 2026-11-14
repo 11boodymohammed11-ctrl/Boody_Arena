@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الشروط والقواعد - Boody Arena</title>
+    <!-- استدعاء خط Cairo عشان يطابق باقي الموقع -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', Tahoma, sans-serif !important;
+            background-color: #f4f6f8;
+        }
+    </style>
+    <!-- استدعاء بوتستراب عشان التصميم يظبط -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container my-4" style="direction: rtl; text-align: right; max-width: 600px;">
+    
+    <!-- كارد الشروط والقواعد -->
+    <div class="card shadow-sm border-0 p-4" style="border-radius: 16px; background: #ffffff;">
+        
+        <!-- العنوان الرئيسي -->
+        <div class="text-center mb-4">
+            <h4 class="fw-bold text-primary" style="font-size: 1.3rem;">📋 الشروط والقواعد الخاصة بـ Boody Arena</h4>
+            <div style="width: 50px; height: 3px; background: #0d6efd; margin: 8px auto 0; border-radius: 2px;"></div>
+        </div>
+
+        <!-- قائمة القواعد والشروط -->
+        <div class="rules-list">
+            
+            <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
+                <span style="font-size: 20px; margin-left: 12px;">⚽</span>
+                <div>
+                    <h6 class="fw-bold text-dark mb-1" style="font-size: 14px;">الحجوزات</h6>
+                    <p class="text-muted m-0" style="font-size: 13px; line-height: 1.6;">يرجى الحضور قبل موعد الحجز بربع ساعة لتجهيز الملعب وبدء المباراة في ميعادها.</p>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
+                <span style="font-size: 20px; margin-left: 12px;">⏱️</span>
+                <div>
+                    <h6 class="fw-bold text-dark mb-1" style="font-size: 14px;">التأخير</h6>
+                    <p class="text-muted m-0" style="font-size: 13px; line-height: 1.6;">في حالة التأخير عن الموعد المحدد، لا يتم تعويض الوقت الضائع من الحجز.</p>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
+                <span style="font-size: 20px; margin-left: 12px;">❌</span>
+                <div>
+                    <h6 class="fw-bold text-dark mb-1" style="font-size: 14px;">الإلغاء</h6>
+                    <p class="text-muted m-0" style="font-size: 13px; line-height: 1.6;">لا يمكن إلغاء الحجز مجاناً في نفس يوم المباراة (راجع سياسة الإلغاء الخاصة بالملعب).</p>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
+                <span style="font-size: 20px; margin-left: 12px;">🤝</span>
+                <div>
+                    <h6 class="fw-bold text-dark mb-1" style="font-size: 14px;">الروح الرياضية</h6>
+                    <p class="text-muted m-0" style="font-size: 13px; line-height: 1.6;">الالتزام بالروح الرياضية والاحترام المتبادل داخل الملعب إجباري لجميع اللاعبين.</p>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-start mb-3">
+                <span style="font-size: 20px; margin-left: 12px;">💰</span>
+                <div>
+                    <h6 class="fw-bold text-dark mb-1" style="font-size: 14px;">الدفع</h6>
+                    <p class="text-muted m-0" style="font-size: 13px; line-height: 1.6;">يتم تأكيد الحجز نهائياً بعد إرسال إيصال الدفع أو التحويل خلال المدة المحددة لتأكيد الحجز.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- زر العودة للرئيسية موحد بنفس الستايل -->
+        <div class="text-center mt-3">
+            <a href="{% url 'home' %}" class="text-decoration-none">← العودة للرئيسية</a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
