@@ -51,6 +51,9 @@
 </head>
 <body class="bg-light">
 
+    <!-- النافبار الموحد -->
+    {% include 'pitches/navbar.html' %}
+
     <div class="container-fluid py-3">
         <h1 class="text-center text-primary fw-bold mb-4">⚽ حجوزاتي الشخصية</h1>
         
@@ -69,9 +72,9 @@
         <!-- لو المستخدم مسجل دخول -->
         {% if request.user.is_authenticated %}
             <div class="table-container">
-                <!-- عرض اسم المستخدم فقط بشكل رايق -->
+                <!-- عرض اسم المستخدم الحقيقي بشكل رايق -->
                 <div class="mb-3">
-                    <h5 class="text-secondary m-0">أهلاً بك، <span class="text-primary fw-bold">{{ request.user.username }}</span> 👋</h5>
+                    <h5 class="text-secondary m-0">أهلاً بك، <span class="text-primary fw-bold">{{ request.user.first_name|default:request.user.username }}</span> 👋</h5>
                 </div>
                 <hr class="text-muted opacity-25">
                 <p class="text-muted small mb-3">هذه قائمة بجميع حجوزاتك المسجلة على النظام:</p>
@@ -175,5 +178,7 @@
 </div>
     </div>
 
+    <!-- Bootstrap JS عشان زرار إغلاق التنبيه يشتغل -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
