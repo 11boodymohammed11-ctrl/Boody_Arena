@@ -19,7 +19,7 @@ class CustomUserCreationForm(forms.Form):
     password1 = forms.CharField(
         label="كلمة المرور",
         widget=forms.PasswordInput(attrs={'id': 'password-input'}),
-        help_text="يجب أن تكون مكونة من 8 أرقام.",
+        help_text="يجب أن تكون مكونة من 8 أرقام على الأقل.",
     )
 
     def clean_phone(self):
@@ -34,8 +34,8 @@ class CustomUserCreationForm(forms.Form):
 
     def clean_password1(self):
         password = self.cleaned_data.get('password1')
-        if not password or not password.isdigit() or len(password) != 8:
-            raise forms.ValidationError("يجب أن تتكون كلمة المرور من 8 أرقام فقط.")
+        if not password or not password.isdigit() or len(password) < 8:
+            raise forms.ValidationError("يجب أن تتكون كلمة المرور من 8 أرقام على الأقل (أرقام فقط).")
         return password
 
     def save(self):
