@@ -216,19 +216,30 @@ def edit_profile(request):
     password_form = PasswordChangeForm(user)
 
     if request.method == 'POST':
-        new_username = request.POST.get('username')
-        new_email = request.POST.get('email')
+        new_name = request.POST.get('name', '').strip()
+        new_email = request.POST.get('email', '').strip()
 
-        if new_username:
-            user.username = new_username
+        # تغيير الباسورد بيحصل بس لو المستخدم كتب حاجة في خاناته
+        wants_password_change = any(
+            request.POST.get(field)
+            for field in ('old_password', 'new_password1', 'new_password2')
+        )
+        if wants_password_change:
+            password_form = PasswordChangeForm(user, request.POST)
+            if not password_form.is_valid():
+                # نرجّع الصفحة ومعاها الأخطاء من غير ما نحفظ أي حاجة
+                return render(request, 'pitches/edit_profile.html', {
+                    'profile': profile,
+                    'password_form': password_form,
+                })
+            user = password_form.save()
+            update_session_auth_hash(request, user)
+
+        # الاسم بيتحفظ في first_name (الـ username هو رقم الدخول ومش بيتغير)
+        if new_name:
+            user.first_name = new_name
         if new_email:
             user.email = new_email
-
-        if 'old_password' in request.POST and request.POST['old_password']:
-            password_form = PasswordChangeForm(user, request.POST)
-            if password_form.is_valid():
-                user = password_form.save()
-                update_session_auth_hash(request, user)
 
         if 'remove_image' in request.POST:
             if profile.profile_image:
@@ -239,7 +250,7 @@ def edit_profile(request):
 
         user.save()
         profile.save()
-        messages.success(request, "تم تحديث البيانات وكلمة المرور بنجاح! ⚽")
+        messages.success(request, "تم حفظ التعديلات بنجاح! ⚽")
         return redirect('edit_profile')
 
     return render(request, 'pitches/edit_profile.html', {'profile': profile, 'password_form': password_form})
