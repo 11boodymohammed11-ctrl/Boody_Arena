@@ -132,6 +132,12 @@
 <body>
     <div class="card">
         <h2>تعديل المعلومات الشخصية ⚙️</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} text-center py-2">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
         
         {% if profile.profile_image %}
             <img src="{{ profile.profile_image.url }}" alt="صورة البروفايل" class="profile-img">
@@ -139,16 +145,20 @@
             <div style="width: 90px; height: 90px; background: #ddd; border-radius: 50%; margin: 0 auto 15px auto; display: flex; align-items: center; justify-content: center; font-size: 35px;">👤</div>
         {% endif %}
 
-        <!-- فورم واحد شامل لكل البيانات وكلمة المرور -->
-        <form method="POST" enctype="multipart/form-data">
+        <!-- فورم واحد شامل، وكل حاجة فيه اختيارية: غيّر اللي عايزه بس -->
+        <form method="POST" enctype="multipart/form-data" novalidate>
             {% csrf_token %}
             <p>
                 <label>صورة البروفايل الجديدة:</label>
-                <input type="file" name="profile_image">
+                <input type="file" name="profile_image" accept="image/*">
             </p>
             <p>
-                <label>اسم المستخدم:</label>
-                <input type="text" name="username" value="{{ request.user.username }}">
+                <label>رقم الهاتف (للدخول):</label>
+                <input type="text" value="{{ request.user.username }}" disabled>
+            </p>
+            <p>
+                <label>الاسم:</label>
+                <input type="text" name="name" value="{{ request.user.first_name }}">
             </p>
             <p>
                 <label>البريد الإلكتروني:</label>
@@ -156,7 +166,7 @@
             </p>
 
             <hr>
-            <h3>تغيير كلمة المرور :</h3>
+            <h3>تغيير كلمة المرور (اختياري) :</h3>
             
             {{ password_form.as_p }}
 
@@ -164,7 +174,7 @@
             <span id="new-pass-msg" class="text-red" style="display:none;">يجب ألا تقل كلمة المرور عن 8 خانات ❌</span>
             <span id="confirm-pass-msg" class="text-red" style="display:none;">كلمة المرور غير متطابقة ❌</span>
 
-            <button type="submit">حفظ كافة التعديلات</button>
+            <button type="submit">حفظ التعديلات</button>
         </form>
 
         <a href="{% url 'home' %}" class="back-link">← العودة للرئيسية</a>
@@ -221,6 +231,16 @@
             if (newPasswordInput && confirmPasswordInput) {
                 newPasswordInput.addEventListener('input', validatePasswords);
                 confirmPasswordInput.addEventListener('input', validatePasswords);
+
+                // نمنع الحفظ بس لو كتب باسورد جديد ومش مطابق للشروط
+                document.querySelector('form').addEventListener('submit', function(e) {
+                    const p = newPasswordInput.value;
+                    if (p.length > 0 && (p.length < 8 || p !== confirmPasswordInput.value)) {
+                        e.preventDefault();
+                        validatePasswords();
+                        newPasswordInput.focus();
+                    }
+                });
             }
         });
     </script>
