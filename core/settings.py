@@ -5,16 +5,27 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
+# ---------------------------------------------------------------
+# إعدادات الأمان
+# على الاستضافة (بايثون أني وير) فيه ملف سري برا المشروع اسمه
+# .boody_secret_key في فولدر الهوم، وهو مش بيترفع على جيت هاب.
+#   - لو الملف موجود  -> وضع الإنتاج: مفتاح سري حقيقي + DEBUG مقفول
+#   - لو مش موجود     -> وضع التطوير (على اللابتوب مثلاً)
+# ---------------------------------------------------------------
+_SECRET_FILE = Path.home() / '.boody_secret_key'
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%p^q@amaqq66dul3p0bmqic25ip8qfgjwfh)o*y@l0pc26i0f2'
+if _SECRET_FILE.exists():
+    SECRET_KEY = _SECRET_FILE.read_text().strip()
+    DEBUG = False
+else:
+    SECRET_KEY = 'django-insecure-dev-only-key'
+    DEBUG = True
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+ALLOWED_HOSTS = ['.pythonanywhere.com', 'localhost', '127.0.0.1']
 
-ALLOWED_HOSTS = ['*']
+# الكوكيز تتبعت عبر HTTPS بس في وضع الإنتاج
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
 
 
 # Application definition
@@ -91,7 +102,7 @@ USE_I18N = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 
 # Email
@@ -105,3 +116,4 @@ MAILERS = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_ROOT = BASE_DIR / 'staticfiles'
