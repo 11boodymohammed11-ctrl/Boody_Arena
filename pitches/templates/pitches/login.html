@@ -112,5 +112,19 @@
             </p>
         </div>
     </div>
+
+    <script>
+        // تحويل الأرقام العربية (٠١٢٣) لأرقام إنجليزي تلقائياً
+        document.addEventListener('DOMContentLoaded', function() {
+            ['id_username', 'id_password'].forEach(function(id) {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', function() {
+                        el.value = el.value.replace(/[٠-٩]/g, function(d) { return d.charCodeAt(0) - 1632; });
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
