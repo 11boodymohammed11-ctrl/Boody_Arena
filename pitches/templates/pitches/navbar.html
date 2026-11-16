@@ -33,15 +33,22 @@
 
   /* اسم الموقع في النص */
   .bn-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-weight: 900;
     font-size: 17px;
     text-decoration: none;
     white-space: nowrap;
+  }
+  /* التدرج على الكلام بس (الإيموجي برا التدرج عشان ميبقاش دايرة زرقا) */
+  .bn-brand-txt {
     background: linear-gradient(90deg, #198754, #0d6efd);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: #198754;
+    padding: 0 2px;
   }
 
   /* زرار القايمة (3 شرط بيتحول لـ X) */
@@ -190,7 +197,11 @@
   </div>
 
   <!-- اسم الموقع في النص -->
-  <a class="bn-brand" href="{% url 'home' %}">⚽ Boody Arena</a>
+  {% if request.resolver_match.url_name != 'home' %}
+    <a class="bn-brand" href="{% url 'home' %}"><span class="bn-brand-ico">⚽</span><span class="bn-brand-txt">Boody Arena</span></a>
+  {% else %}
+    <span></span>
+  {% endif %}
 
   <!-- البروفايل في الشمال -->
   <div class="bn-side bn-side-end">
