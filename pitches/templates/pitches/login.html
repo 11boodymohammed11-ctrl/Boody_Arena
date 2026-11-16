@@ -85,7 +85,22 @@
         <h2>تسجيل الدخول ⚽</h2>
         <form method="POST">
             {% csrf_token %}
-            {{ form.as_p }}
+
+            {% if form.non_field_errors %}
+                <ul class="errorlist">
+                    <li>رقم الهاتف أو كلمة المرور غير صحيحة.</li>
+                </ul>
+            {% endif %}
+
+            <p>
+                <label for="id_username">رقم الهاتف</label>
+                {{ form.username }}
+            </p>
+            <p>
+                <label for="id_password">كلمة المرور</label>
+                {{ form.password }}
+            </p>
+
             <button type="submit">دخول</button>
         </form>
         
