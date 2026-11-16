@@ -259,9 +259,15 @@ def pitch_detail(request, pitch_id):
     pitch = get_object_or_404(Pitch, id=pitch_id)
     return render(request, 'pitches/pitch_detail.html', {'pitch': pitch})
 
+@login_required(login_url='login')
 def cancel_reservation(request, reservation_id):
     reservation = get_object_or_404(Reservation, id=reservation_id)
     today = date.today()
+
+    # صاحب الحجز أو الأدمن بس هما اللي يقدروا يلغوه
+    if not (request.user.is_staff or reservation.user == request.user):
+        messages.error(request, "عذراً، لا يمكنك إلغاء هذا الحجز.")
+        return redirect('customer_profile')
 
     if request.user.is_staff or reservation.date > today:
         reservation.is_cancelled = True
