@@ -102,22 +102,49 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // تحويل الأرقام العربية (٠١٢٣) لأرقام إنجليزي تلقائياً
+            const toEnglishDigits = function(s) {
+                return s.replace(/[٠-٩]/g, function(d) { return d.charCodeAt(0) - 1632; });
+            };
+
+            // خانة أرقام فقط (الحد الأقصى اختياري)
+            function digitsOnly(input, maxLen) {
+                input.setAttribute('inputmode', 'numeric');
+                if (maxLen) {
+                    input.setAttribute('maxlength', maxLen);
+                }
+                input.addEventListener('input', function() {
+                    let v = toEnglishDigits(input.value).replace(/\D/g, '');
+                    if (maxLen) {
+                        v = v.slice(0, maxLen);
+                    }
+                    input.value = v;
+                });
+            }
+
+            const phoneInput = document.querySelector('input[name="phone"]');
+            if (phoneInput) {
+                digitsOnly(phoneInput, 11);
+            }
+
             const passwordInput = document.querySelector('input[type="password"]');
-            
+
             if (passwordInput) {
+                digitsOnly(passwordInput);
+
                 const helpText = passwordInput.parentElement.querySelector('.helptext');
-                
+
                 if (helpText) {
                     helpText.className = 'helptext text-red';
-                    
+
                     passwordInput.addEventListener('input', function() {
                         const length = passwordInput.value.length;
-                        
+
                         if (length >= 8) {
-                            helpText.textContent = "كلمة المرور مطابقة للشروط (8 خانات أو أكثر) ✔️";
+                            helpText.textContent = "كلمة المرور مطابقة للشروط (8 أرقام على الأقل) ✔️";
                             helpText.className = 'helptext text-green';
                         } else {
-                            helpText.textContent = "يجب أن تكون كلمة المرور مكونة من 8 خانات أو أكثر ❌";
+                            helpText.textContent = "يجب أن تكون كلمة المرور 8 أرقام على الأقل ❌";
                             helpText.className = 'helptext text-red';
                         }
                     });
